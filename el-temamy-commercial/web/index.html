@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>El Temamy Commercial</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root {
+    --orange: #F58220;
+    --orange-deep: #E86A0C;
+    --cream: #F7EEE2;
+    --offwhite: #FFFAF3;
+    --charcoal: #2B2622;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
+  #stage { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(120% 80% at 50% 38%, #FFFAF3 0%, #F7EEE2 55%, #EEDFCC 100%); }
+  .abs { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
+  .blob { position: absolute; border-radius: 50%; }
+  #warm { position: absolute; inset: 0; opacity: 0; background: radial-gradient(60% 40% at 59% 72%, rgba(255,176,102,.55) 0%, rgba(255,176,102,0) 70%); }
+
+  /* phone */
+  #phone { position: absolute; left: 0; top: 0; border-radius: 84px; transform-origin: 50% 50%; }
+  #phoneBody { position: absolute; inset: 0; border-radius: inherit; }
+  #screen { position: absolute; left: 20px; top: 20px; width: 600px; height: 1301px; border-radius: 64px; overflow: hidden; background: #fff; }
+  #screen img { position: absolute; left: 0; top: 0; width: 600px; height: 1301px; object-fit: cover; }
+  .btn { position: absolute; background: #1f1c1a; border-radius: 3px; }
+  #shade { position: absolute; inset: 0; background: #1b120b; opacity: 0; }
+  #press { position: absolute; background: #000; border-radius: 8px; opacity: 0; }
+  #ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.9); opacity: 0; }
+  #glass { position: absolute; inset: 0; border-radius: 64px; background: linear-gradient(125deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 32%); pointer-events: none; }
+
+  .piece { position: absolute; left: 0; top: 0; border-radius: 16px; transform-origin: 50% 50%; }
+
+  /* scan */
+  #scanWrap { position: absolute; left: 0; top: 0; }
+  #scanTint { position: absolute; left: 0; top: 0; width: 100%; background: linear-gradient(180deg, rgba(245,130,32,0) 0%, rgba(245,130,32,.10) 100%); }
+  #scanLine { position: absolute; height: 6px; border-radius: 3px; background: linear-gradient(90deg, rgba(245,130,32,0), #F58220 12%, #FF9A3C 50%, #F58220 88%, rgba(245,130,32,0)); box-shadow: 0 0 22px 4px rgba(245,130,32,.55); }
+  .corner { position: absolute; width: 64px; height: 64px; border-color: var(--orange); border-style: solid; border-width: 0; }
+
+  svg { position: absolute; left: 0; top: 0; overflow: visible; }
+
+  /* bag */
+  #bag { position: absolute; left: 0; top: 0; width: 440px; height: 500px; transform-origin: 50% 100%; }
+  #bagBack { position: absolute; left: 14px; top: -26px; width: 412px; height: 80px; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #C85A0A 0%, #D8660F 100%); }
+  #bagFront { position: absolute; inset: 0; border-radius: 6px 6px 10px 10px; overflow: hidden;
+    background: linear-gradient(180deg, #F88D2F 0%, #F47F1F 48%, #EA7214 100%); box-shadow: inset 0 -30px 60px rgba(150,60,0,.18); }
+  #bagFront .fold { position: absolute; left: 0; right: 0; top: 0; height: 44px; background: linear-gradient(180deg, #FB9A43 0%, #F68828 100%); box-shadow: 0 3px 6px rgba(140,55,0,.22); }
+  #bagFront .side { position: absolute; top: 0; bottom: 0; width: 34px; }
+  #bagFront .side.l { left: 0; background: linear-gradient(90deg, rgba(120,45,0,.16), rgba(120,45,0,0)); }
+  #bagFront .side.r { right: 0; background: linear-gradient(270deg, rgba(120,45,0,.20), rgba(120,45,0,0)); }
+  #bagFront .crease { position: absolute; left: 0; right: 0; bottom: 70px; height: 2px; background: rgba(150,60,0,.10); }
+  #bagLogo { position: absolute; left: 50%; top: 96px; width: 196px; transform: translateX(-50%); }
+  .handle { position: absolute; left: 118px; top: -128px; width: 204px; height: 170px; border: 11px solid #D9650E; border-bottom: none; border-radius: 102px 102px 0 0; }
+  #bagShadow { position: absolute; left: 0; top: 0; width: 560px; height: 70px; border-radius: 50%; background: radial-gradient(closest-side, rgba(90,45,10,.28), rgba(90,45,10,0)); }
+  #check { position: absolute; left: 0; top: 0; width: 116px; height: 116px; border-radius: 50%; background: #FFFAF3; box-shadow: 0 14px 30px rgba(120,55,10,.22), inset 0 0 0 6px var(--orange); }
+
+  #doorGlow { position: absolute; left: 0; top: 0; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,190,120,.85), rgba(255,170,90,.35) 45%, rgba(255,170,90,0)); opacity: 0; }
+
+  /* headlines */
+  .hl { position: absolute; left: 0; width: 1080px; text-align: center; direction: rtl; overflow: hidden; padding: 14px 0 22px; }
+  .hl span.in { display: inline-block; font-family: 'Cairo', sans-serif; font-weight: 800; color: var(--charcoal); letter-spacing: 0; white-space: nowrap; line-height: 1.25; }
+  .hl .o { color: var(--orange-deep); }
+  #accent { position: absolute; height: 8px; border-radius: 4px; background: var(--orange); left: 540px; }
+  #scrim { position: absolute; left: 0; top: 0; width: 1080px; height: 560px; background: linear-gradient(180deg, rgba(247,238,226,.96) 0%, rgba(247,238,226,.9) 55%, rgba(247,238,226,0) 100%); opacity: 0; }
+
+  /* end frame */
+  #end { position: absolute; inset: 0; clip-path: circle(0px at 640px 1400px);
+    background: linear-gradient(160deg, #FE9D2F 0%, #FA851B 42%, #F3700A 100%); }
+  #end .light { position: absolute; inset: 0; background: radial-gradient(70% 45% at 50% 34%, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 70%); }
+  #end .shape { position: absolute; border-radius: 50%; background: #FFF3E2; }
+  #endLogo { position: absolute; left: 290px; top: 470px; width: 500px; }
+  #endLine1 { top: 1150px; }
+  #endLine1 span.in { color: #FFFFFF; font-size: 92px; text-shadow: 0 6px 24px rgba(140,55,0,.18); }
+  #pillWrap { position: absolute; left: 0; width: 1080px; top: 1318px; text-align: center; }
+  #pill { display: inline-block; direction: rtl; font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 58px; color: #E0650B; background: #FFF6EA; padding: 10px 64px 18px; border-radius: 999px; box-shadow: 0 16px 40px rgba(130,50,0,.20); }
+
+  #grain { position: absolute; inset: 0; opacity: .055; mix-blend-mode: overlay; pointer-events: none; }
+  #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(130% 90% at 50% 45%, rgba(0,0,0,0) 60%, rgba(60,30,5,.16) 100%); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div id="warm"></div>
+
+  <!-- S5 house + ground (drawn by the travelling orange path) -->
+  <svg id="houseSvg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs><filter id="glowF" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter></defs>
+    <path id="doorFill" d="M585 1500 V1322 Q585 1300 607 1300 H673 Q695 1300 695 1322 V1500 Z" fill="#FFB36B" opacity="0"/>
+    <g id="houseLines" fill="none" stroke="#F58220" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+      <path id="houseGlow" d="M20 1500 H360 V1120 L640 860 L920 1120 V1500 H1060" filter="url(#glowF)" opacity=".45" stroke-width="12"/>
+      <path id="housePath" d="M20 1500 H360 V1120 L640 860 L920 1120 V1500 H1060"/>
+      <path id="doorPath" d="M585 1500 V1322 Q585 1300 607 1300 H673 Q695 1300 695 1322 V1500"/>
+      <path id="winPath" d="M640 1030 m-44 0 a44 44 0 1 0 88 0 a44 44 0 1 0 -88 0"/>
+    </g>
+  </svg>
+  <div id="doorGlow"></div>
+
+  <!-- phone -->
+  <div id="phone">
+    <div id="phoneBody"></div>
+    <div class="btn" id="btnR" style="right:-6px;top:300px;width:6px;height:150px"></div>
+    <div class="btn" id="btnL1" style="left:-6px;top:250px;width:6px;height:90px"></div>
+    <div class="btn" id="btnL2" style="left:-6px;top:370px;width:6px;height:90px"></div>
+    <div id="screen">
+      <img id="scrHome" src="img/screen_home.png">
+      <div id="press"></div>
+      <div id="ripple"></div>
+      <div id="shade"></div>
+      <img id="scrRx" src="img/screen_rx.png">
+      <div id="glass"></div>
+    </div>
+  </div>
+
+  <!-- real UI pieces lifted from the home screen -->
+  <img class="piece" id="p_banner" src="img/ui_banner.png">
+  <img class="piece" id="p_cats" src="img/ui_cats.png">
+  <img class="piece" id="p_prod2" src="img/ui_prod2.png">
+  <img class="piece" id="p_prod1" src="img/ui_prod1.png">
+
+  <!-- prescription + scan -->
+  <div id="scanWrap">
+    <img class="piece" id="paper" src="img/ui_rxpaper.png" style="position:absolute;left:0;top:0;width:100%;height:100%;border-radius:10px">
+    <div id="scanTint"></div>
+    <div class="corner" id="c1" style="left:-28px;top:-28px;border-width:6px 0 0 6px;border-top-left-radius:18px"></div>
+    <div class="corner" id="c2" style="right:-28px;top:-28px;border-width:6px 6px 0 0;border-top-right-radius:18px"></div>
+    <div class="corner" id="c3" style="left:-28px;bottom:-28px;border-width:0 0 6px 6px;border-bottom-left-radius:18px"></div>
+    <div class="corner" id="c4" style="right:-28px;bottom:-28px;border-width:0 6px 6px 0;border-bottom-right-radius:18px"></div>
+  </div>
+  <div id="scanLine" class="abs"></div>
+
+  <!-- S4 motion path (scan line peels off and travels) -->
+  <svg id="pathSvg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <g fill="none" stroke-linecap="round">
+      <path id="cometGlow" d="" stroke="#F58220" stroke-width="16" filter="url(#glowF)" opacity=".5"/>
+      <path id="comet" d="" stroke="#F58220" stroke-width="7"/>
+    </g>
+  </svg>
+
+  <!-- order preparation -->
+  <div id="bagShadow" class="abs"></div>
+  <div id="bag">
+    <div class="handle" style="left:132px;top:-120px;border-color:#B9540A"></div>
+    <div id="bagBack"></div>
+    <img class="piece" id="d_prod2" src="img/ui_prod2.png">
+    <img class="piece" id="d_prod1" src="img/ui_prod1.png">
+    <div id="bagFront">
+      <div class="fold"></div>
+      <div class="side l"></div><div class="side r"></div>
+      <div class="crease"></div>
+      <img id="bagLogo" src="img/logo_white.png">
+    </div>
+    <div class="handle"></div>
+  </div>
+  <div id="check">
+    <svg width="116" height="116" viewBox="0 0 116 116"><path id="checkPath" d="M36 60 L52 75 L82 43" fill="none" stroke="#F58220" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- headlines (exact approved copy only) -->
+  <div id="scrim"></div>
+  <div class="hl" id="h1" style="top:196px"><span class="in" style="font-size:100px">صيدلية في كل <span class="o">بيت</span></span></div>
+  <div class="hl" id="h2" style="top:196px"><span class="in" style="font-size:100px">اطلب عبر <span class="o">التطبيق</span></span></div>
+  <div class="hl" id="h3" style="top:204px"><span class="in" style="font-size:88px">صوّر <span class="o">روشتتك</span> أو أدويتك</span></div>
+  <div class="hl" id="h4" style="top:196px"><span class="in" style="font-size:100px">طلبك <span class="o">بيتجهز</span></span></div>
+  <div class="hl" id="h5" style="top:196px"><span class="in" style="font-size:100px">توصيل لحد <span class="o">عندك</span></span></div>
+
+  <!-- brand end frame -->
+  <div id="end">
+    <div class="shape" id="s1" style="left:640px;top:-260px;width:820px;height:820px;opacity:.10"></div>
+    <div class="shape" id="s2" style="left:-420px;top:1420px;width:1040px;height:1040px;opacity:.12"></div>
+    <div class="shape" id="s3" style="left:820px;top:1560px;width:420px;height:420px;opacity:.08"></div>
+    <div class="light"></div>
+    <img id="endLogo" src="img/logo_white.png">
+    <div class="hl" id="endLine1"><span class="in">صيدلية في كل بيت</span></div>
+    <div id="pillWrap"><span id="pill">اطلب عبر التطبيق</span></div>
+  </div>
+
+  <canvas id="grain" width="1080" height="1920"></canvas>
+  <div id="vignette"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const p = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const lin = x => x;
+const eIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const eIOq = x => x < .5 ? 16 * x ** 5 : 1 - Math.pow(-2 * x + 2, 5) / 2;
+const eOut = x => 1 - Math.pow(1 - x, 3);
+const eOut5 = x => 1 - Math.pow(1 - x, 5);
+const eIn = x => x * x * x;
+const eBack = x => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+// keyframe track: [[t, v], [t, v, ease], ...] - ease applies to the segment that arrives at that key
+function tr(t, keys) {
+  if (t <= keys[0][0]) return keys[0][1];
+  for (let i = 1; i < keys.length; i++) {
+    const [t1, v1, e] = keys[i];
+    if (t <= t1) { const [t0, v0] = keys[i - 1]; return lerp(v0, v1, (e || eIO)((t - t0) / (t1 - t0))); }
+  }
+  return keys[keys.length - 1][1];
+}
+const set = (el, css) => Object.assign(el.style, css);
+
+// ---------- static setup ----------
+(function grain() {
+  const c = $('grain'), g = c.getContext('2d'), im = g.createImageData(1080, 1920);
+  let s = 1337; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < im.data.length; i += 4) { const v = 128 + (rnd() - .5) * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+  g.putImageData(im, 0, 0);
+})();
+set($('b1'), { width: '900px', height: '900px', background: 'radial-gradient(closest-side, rgba(255,214,170,.55), rgba(255,214,170,0))' });
+set($('b2'), { width: '1100px', height: '1100px', background: 'radial-gradient(closest-side, rgba(255,255,255,.75), rgba(255,255,255,0))' });
+set($('b3'), { width: '800px', height: '800px', background: 'radial-gradient(closest-side, rgba(240,200,160,.40), rgba(240,200,160,0))' });
+
+const SC = 600 / 768;                 // home screenshot px -> css px
+const RX = { s: 0.95944, ox: -1.25 };  // rx screenshot object-fit: cover mapping
+const BODY_W = 640, BODY_H = 1341;
+const PIECES = {
+  p_banner: { r: [14, 262, 756, 632], to: [318, 640], k: 0.96, rot: -2.5, d: 0.00, ph: 0.0 },
+  p_cats:   { r: [0, 752, 768, 1052], to: [752, 1160], k: 0.92, rot: 2.0, d: 0.07, ph: 1.7 },
+  p_prod2:  { r: [128, 1180, 414, 1540], to: [236, 1500], k: 1.28, rot: -3.0, d: 0.14, ph: 3.1 },
+  p_prod1:  { r: [424, 1180, 728, 1540], to: [846, 1590], k: 1.28, rot: 3.0, d: 0.20, ph: 4.4 },
+};
+const PAPER = { cx: 320 * RX.s + RX.ox - 300, cy: 690 * RX.s - 650.5, w: 340 * RX.s, aspect: 380 / 340 };
+
+// ---------- timeline ----------
+function phoneState(t) {
+  const s = tr(t, [[0, 1.0], [2.0, 1.035, lin], [2.9, 1.10], [3.5, 1.10], [4.1, 1.06], [4.75, 1.55], [5.75, 1.6, lin], [6.35, 1.62]]);
+  const cx = tr(t, [[0, 540], [2.2, 540], [2.9, 522], [3.4, 522], [4.1, 540]]);
+  const cy = tr(t, [[0, 1090], [2.0, 1080, lin], [2.9, 1110], [3.4, 1110], [4.1, 1080], [4.75, 1000 - PAPER.cy * 1.55], [5.75, 1000 - PAPER.cy * 1.6, lin], [6.35, -700]]);
+  const ry = tr(t, [[0, 0], [2.2, 0], [2.95, -10], [3.3, -10], [3.95, 0]]);
+  const rx = tr(t, [[0, 0], [2.2, 0], [2.95, 5], [3.3, 5], [3.95, 0]]);
+  return { s, cx, cy, ry, rx };
+}
+const toFrame = (ph, lx, ly) => [ph.cx + ph.s * lx, ph.cy + ph.s * ly];
+
+function headline(el, t, tin, tout, opts = {}) {
+  const inner = el.firstElementChild;
+  const a = eOut5(p(t, tin, tin + 0.62));
+  const b = eIO(p(t, tout, tout + 0.32));
+  const y = (1 - a) * 105 - b * 40;
+  set(inner, { transform: `translateY(${y}%)`, opacity: String(clamp(a * 1.4) * (1 - b)) });
+  el.style.visibility = (a > 0 && b < 1) ? 'visible' : 'hidden';
+  return a * (1 - b);
+}
+
+function renderAt(t) {
+  // background drift (subtle parallax)
+  set($('b1'), { transform: `translate(${-160 + Math.sin(t * .35) * 40}px, ${120 + t * 6}px)` });
+  set($('b2'), { transform: `translate(${340 + Math.cos(t * .3) * 30}px, ${760 - t * 10}px)` });
+  set($('b3'), { transform: `translate(${-240 + t * 8}px, ${1300 + Math.sin(t * .4) * 30}px)` });
+
+  // ---------- phone ----------
+  const ph = phoneState(t);
+  const grow = eIOq(p(t, 0.42, 1.18));
+  const dotIn = eBack(p(t, 0.12, 0.42));
+  const d0 = 30 * clamp(dotIn, 0, 1.2);
+  const w = lerp(d0, BODY_W, grow), h = lerp(d0, BODY_H, grow);
+  const rad = lerp(d0 / 2, 84, grow);
+  const bez = eIO(p(t, 0.98, 1.42));
+  const scr = eIO(p(t, 1.02, 1.5));
+  const phOp = 1 - eIO(p(t, 5.95, 6.35));
+  const blur = tr(t, [[0, 0], [4.7, 0], [5.15, 6]]);
+  const phone = $('phone');
+  set(phone, {
+    width: w + 'px', height: h + 'px', borderRadius: rad + 'px',
+    transform: `translate(${ph.cx - w / 2}px, ${ph.cy - h / 2}px) perspective(2400px) rotateY(${ph.ry}deg) rotateX(${ph.rx}deg) scale(${ph.s})`,
+    opacity: String(t < 0.12 ? 0 : phOp), filter: blur > 0.05 ? `blur(${blur}px) brightness(${1 - blur * 0.02})` : 'none',
+    visibility: phOp <= 0 ? 'hidden' : 'visible',
+  });
+  const orange = [245, 130, 32], dark = [28, 26, 25];
+  const col = orange.map((c, i) => Math.round(lerp(c, dark[i], bez)));
+  const glow = (1 - grow) * 0.6;
+  set($('phoneBody'), {
+    background: `linear-gradient(145deg, rgb(${col.map(c => c + 26 * bez)}) 0%, rgb(${col}) 40%, rgb(${col}) 100%)`,
+    boxShadow: `0 0 ${60 * glow}px ${20 * glow}px rgba(245,130,32,${glow}), 0 ${70 * grow}px ${130 * grow}px rgba(90,45,10,${.28 * grow}), 0 ${22 * grow}px ${44 * grow}px rgba(90,45,10,${.16 * grow}), inset 0 0 0 ${2 * bez}px rgba(255,255,255,.10)`,
+  });
+  for (const b of ['btnR', 'btnL1', 'btnL2']) $(b).style.opacity = String(bez);
+  set($('screen'), { opacity: String(scr), left: (20 * grow) + 'px', top: (20 * grow) + 'px', transform: `scale(${lerp(0.6, 1, grow)})`, transformOrigin: '0 0' });
+  $('screen').style.visibility = scr > 0 ? 'visible' : 'hidden';
+
+  // tap on the real "upload prescription" button, then native push navigation to the prescription screen
+  const bx = 385 * SC, by = 691 * SC;
+  const rp = p(t, 3.28, 3.72);
+  set($('ripple'), { left: (bx - 150) + 'px', top: (by - 150) + 'px', width: '300px', height: '300px', transform: `scale(${eOut(rp)})`, opacity: String(rp > 0 && rp < 1 ? .45 * (1 - rp) : 0) });
+  set($('press'), { left: 14 * SC + 'px', top: 640 * SC + 'px', width: 742 * SC + 'px', height: 102 * SC + 'px', opacity: String(0.14 * Math.sin(Math.PI * p(t, 3.26, 3.56))) });
+  const nav = eIO(p(t, 3.52, 3.98));
+  set($('scrRx'), { transform: `translateX(${(nav - 1) * 100}%)`, visibility: nav > 0 ? 'visible' : 'hidden', boxShadow: '30px 0 60px rgba(0,0,0,.18)' });
+  set($('scrHome'), { transform: `translateX(${nav * 30}%)` });
+  $('shade').style.opacity = String(nav * 0.28);
+
+  // ---------- floating UI pieces (S2) ----------
+  const ph0 = phoneState(2.05);
+  for (const [id, P] of Object.entries(PIECES)) {
+    const el = $(id), [x0, y0, x1, y1] = P.r;
+    const [sx, sy] = toFrame(ph0, ((x0 + x1) / 2) * SC - 300, ((y0 + y1) / 2) * SC - 650.5);
+    const bw = (x1 - x0) * SC * ph0.s, bh = (y1 - y0) * SC * ph0.s;
+    const L = eIO(p(t, 2.05 + P.d, 2.95 + P.d));
+    const X = eIO(p(t, 3.08 + P.d * .4, 3.4 + P.d * .4));
+    let cx = lerp(sx, P.to[0], L), cy = lerp(sy, P.to[1], L) - Math.sin(Math.PI * L) * 30;
+    cx += Math.sin((t - 2) * 1.5 + P.ph) * 5 * L; cy += Math.cos((t - 2) * 1.3 + P.ph) * 7 * L;
+    const ang = Math.atan2(P.to[1] - 1000, P.to[0] - 540);
+    cx += Math.cos(ang) * 70 * X; cy += Math.sin(ang) * 70 * X;
+    const k = lerp(1, P.k, L) * (1 + 0.05 * X);
+    const vis = t >= 2.05 && X < 1;
+    set(el, {
+      width: bw + 'px', height: bh + 'px', display: vis ? 'block' : 'none',
+      transform: `translate(${cx - bw / 2}px, ${cy - bh / 2}px) rotate(${P.rot * L}deg) scale(${k})`,
+      boxShadow: `0 ${34 * L}px ${70 * L}px rgba(90,45,10,${.24 * L}), 0 ${8 * L}px ${18 * L}px rgba(90,45,10,${.12 * L})`,
+      opacity: String(1 - X), filter: X > 0.01 ? `blur(${X * 3}px)` : 'none',
+    });
+  }
+
+  // ---------- prescription lift + scan (S3) ----------
+  const L2 = eIO(p(t, 4.6, 5.05));
+  const up = eIO(p(t, 5.75, 6.2));
+  const [pcx, pcy] = toFrame(ph, PAPER.cx, PAPER.cy);
+  const pw = lerp(PAPER.w * ph.s, 640, L2), phh = pw * PAPER.aspect;
+  const pX = lerp(pcx, 540, L2), pY = lerp(pcy, 1000, L2) - up * 1250;
+  const paperOn = t >= 4.6 && up < 1;
+  set($('scanWrap'), {
+    width: pw + 'px', height: phh + 'px', display: paperOn ? 'block' : 'none',
+    transform: `translate(${pX - pw / 2}px, ${pY - phh / 2}px)`, opacity: String(1 - eIO(p(t, 5.9, 6.18))),
+  });
+  $('paper').style.boxShadow = `0 ${40 * L2}px ${80 * L2}px rgba(90,45,10,${.26 * L2}), 0 ${10 * L2}px ${20 * L2}px rgba(90,45,10,${.12 * L2})`;
+  const cIn = eOut(p(t, 4.85, 5.1)), cOut = eIO(p(t, 5.66, 5.86));
+  for (const c of ['c1', 'c2', 'c3', 'c4']) set($(c), { opacity: String(cIn * (1 - cOut)), transform: `scale(${lerp(1.25, 1, cIn)})` });
+  const sp = eIO(p(t, 4.98, 5.66));
+  const lineY = lerp(pY - phh / 2 + 4, pY + phh / 2, sp);
+  const scanOn = t >= 4.98 && t < 5.78;
+  set($('scanLine'), { width: (pw + 60) + 'px', display: scanOn ? 'block' : 'none', transform: `translate(${pX - pw / 2 - 30}px, ${lineY - 3}px)`, opacity: String(p(t, 4.98, 5.05)) });
+  set($('scanTint'), { height: (sp * phh) + 'px', opacity: String(t < 5.98 ? 1 : 0) });
+
+  // ---------- motion path: scan line peels off and travels to the bag (S4) ----------
+  const comet = $('comet'), cg = $('cometGlow');
+  const lineLeft = 540 - 320 - 30, lineRight = 540 + 320 + 30, ly = 1000 + 640 * PAPER.aspect / 2;
+  const d = `M${lineLeft} ${ly} L${lineRight} ${ly} C${lineRight + 110} ${ly} ${1040} ${ly + 120} ${960} ${ly + 230} C${880} ${ly + 330} ${660} ${ly + 380} ${470} ${ly + 330} C${260} ${ly + 270} ${200} ${ly + 30} ${300} ${ly - 180} C${370} ${ly - 330} ${460} ${ly - 390} ${540} ${ly - 380}`;
+  if (comet.getAttribute('d') !== d) { comet.setAttribute('d', d); cg.setAttribute('d', d); comet._len = comet.getTotalLength(); }
+  const Lp = comet._len, seg0 = lineRight - lineLeft;
+  const cp = p(t, 5.72, 6.55);
+  if (cp > 0 && cp < 1) {
+    const e = eIO(cp);
+    const head = lerp(seg0, Lp, e);
+    const len = cp < 0.7 ? lerp(seg0, 320, eOut(cp / 0.7)) : lerp(320, 0, eIn((cp - 0.7) / 0.3));
+    const tail = Math.max(0, head - len);
+    for (const el of [comet, cg]) { el.style.strokeDasharray = `${head - tail} ${Lp * 2}`; el.style.strokeDashoffset = String(-tail); el.style.opacity = el === cg ? '.5' : '1'; }
+  } else { comet.style.opacity = cg.style.opacity = '0'; }
+
+  // ---------- order preparation (S4) ----------
+  const bagIn = eOut(p(t, 6.28, 6.8));
+  const mv = eIO(p(t, 7.72, 8.3));
+  const trav = eIO(p(t, 8.4, 9.25));
+  const bagS = lerp(1, 0.42, mv) * lerp(1, 0.25 / 0.42, trav) * lerp(0.95, 1, bagIn);
+  let bagX = lerp(540, 232, mv), bagB = lerp(1430, 1500, mv) + (1 - bagIn) * 90;
+  bagX = lerp(bagX, 640, trav); bagB -= Math.abs(Math.sin(trav * Math.PI * 3)) * 10 * (trav > 0 && trav < 1 ? 1 : 0);
+  const wob = Math.exp(-Math.max(0, t - 7.2) * 7) * Math.sin(Math.max(0, t - 7.2) * 26) * (t > 7.2 ? 1 : 0)
+            + Math.exp(-Math.max(0, t - 7.36) * 7) * Math.sin(Math.max(0, t - 7.36) * 26) * (t > 7.36 ? 1 : 0);
+  const bagFade = 1 - eIO(p(t, 9.12, 9.36));
+  set($('bag'), {
+    transform: `translate(${bagX - 220}px, ${bagB - 500}px) scale(${bagS}) scaleY(${1 - wob * 0.012}) rotate(${wob * 0.6}deg)`,
+    opacity: String(bagIn * bagFade), display: t > 6.28 && bagFade > 0 ? 'block' : 'none',
+  });
+  set($('bagShadow'), { transform: `translate(${bagX - 280}px, ${bagB - 36}px) scale(${bagS})`, opacity: String(bagIn * bagFade) });
+  // real product cards float in, then drop into the bag (bag-local coordinates)
+  const cards = [['d_prod2', -470, 150, -150, -4, 6.45, 6.95], ['d_prod1', 900, 290, -170, 4, 6.52, 7.1]];
+  for (const [id, fx, tx, ty, rot, tIn, tDrop] of cards) {
+    const el = $(id), cw = 286 * SC * 1.05, chh = 360 * SC * 1.05;
+    const a = eOut(p(t, tIn, tIn + 0.5)), dr = eIn(p(t, tDrop, tDrop + 0.32));
+    const x = lerp(fx, tx, a) - cw / 2 + (id === 'd_prod1' ? -10 : 10) * dr;
+    const y = lerp(ty - 40, ty, a) - chh / 2 + dr * 420 + Math.sin((t - tIn) * 2.2) * 4 * (1 - dr);
+    set(el, { width: cw + 'px', height: chh + 'px', display: t > tIn && dr < 1 ? 'block' : 'none',
+      transform: `translate(${x}px, ${y}px) rotate(${rot * (1 - dr)}deg)`, boxShadow: '0 22px 44px rgba(90,45,10,.22)', opacity: String(clamp(a * 1.5)) });
+  }
+  const ck = p(t, 7.4, 7.68), ckOut = eIO(p(t, 7.7, 7.92));
+  set($('check'), { transform: `translate(${745 - 58}px, ${948 - 58}px) scale(${clamp(eBack(ck), 0, 1.3) * (1 - ckOut * 0.3)})`, opacity: String((ck > 0 ? 1 : 0) * (1 - ckOut)), display: ck > 0 && ckOut < 1 ? 'block' : 'none' });
+  const cpth = $('checkPath'); if (!cpth._len) cpth._len = cpth.getTotalLength();
+  set(cpth, { strokeDasharray: cpth._len, strokeDashoffset: String(cpth._len * (1 - eOut(p(t, 7.48, 7.7)))) });
+
+  // ---------- delivery: path draws ground + home outline (S5) ----------
+  const hp = $('housePath'), hg = $('houseGlow'), dp = $('doorPath'), wp = $('winPath');
+  for (const el of [hp, hg, dp, wp]) if (!el._len) el._len = el.getTotalLength();
+  const hd = eIO(p(t, 7.85, 8.95));
+  for (const el of [hp, hg]) set(el, { strokeDasharray: el._len, strokeDashoffset: String(el._len * (1 - hd)) });
+  set(dp, { strokeDasharray: dp._len, strokeDashoffset: String(dp._len * (1 - eIO(p(t, 8.6, 9.0)))) });
+  set(wp, { strokeDasharray: wp._len, strokeDashoffset: String(wp._len * (1 - eIO(p(t, 8.7, 9.05)))) });
+  const houseFade = 1 - eIO(p(t, 9.62, 9.98));
+  set($('houseSvg'), { opacity: String(houseFade), display: t > 7.85 && houseFade > 0 ? 'block' : 'none' });
+  const dg = eIO(p(t, 9.02, 9.5));
+  $('doorFill').setAttribute('opacity', String(dg * 0.95));
+  set($('doorGlow'), { transform: `translate(${640 - 260}px, ${1400 - 260}px) scale(${lerp(0.6, 1.2, dg)})`, opacity: String(dg * houseFade) });
+  $('warm').style.opacity = String(eIO(p(t, 7.8, 9.3)) * 0.9);
+
+  // ---------- headlines ----------
+  const hs = [
+    headline($('h1'), t, 0.95, 1.98),
+    headline($('h2'), t, 2.22, 3.92),
+    headline($('h3'), t, 4.12, 5.72),
+    headline($('h4'), t, 6.3, 7.72),
+    headline($('h5'), t, 7.9, 9.42),
+  ];
+  $('scrim').style.opacity = String(Math.max(eIO(p(t, 3.95, 4.4)) * (1 - eIO(p(t, 5.8, 6.15))), 0));
+
+  // ---------- brand end frame (S6) ----------
+  const rv = eIO(p(t, 9.45, 10.22));
+  set($('end'), { clipPath: `circle(${rv * 2300}px at 640px 1400px)`, display: rv > 0 ? 'block' : 'none' });
+  const lg = eOut(p(t, 9.82, 10.38));
+  set($('endLogo'), { opacity: String(lg), transform: `scale(${lerp(0.93, 1, lg)})`, filter: lg < 1 ? `blur(${(1 - lg) * 10}px)` : 'none' });
+  const e1 = eOut5(p(t, 9.94, 10.4));
+  set($('endLine1').firstElementChild, { transform: `translateY(${(1 - e1) * 100}%)`, opacity: String(clamp(e1 * 1.4)) });
+  const e2 = eOut5(p(t, 10.0, 10.4));
+  set($('pill'), { transform: `translateY(${(1 - e2) * 40}px) scale(${lerp(0.96, 1, e2)})`, opacity: String(e2), display: 'inline-block' });
+  set($('s1'), { transform: `translate(${(1 - rv) * 60}px, ${(1 - rv) * -40}px)` });
+  set($('s2'), { transform: `translate(${(1 - rv) * -60}px, ${(1 - rv) * 50}px)` });
+}
+window.renderAt = renderAt;
+window.ready = Promise.all([document.fonts.load('800 100px Cairo', 'صيدلية'), document.fonts.load('700 58px Cairo', 'اطلب'), document.fonts.ready, ...[...document.images].map(i => i.decode())]).then(() => { renderAt(0); return true; });
+</script>
+</body>
+</html>
